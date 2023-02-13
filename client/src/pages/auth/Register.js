@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useAuth } from "../../context/auth";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
   // state
@@ -13,6 +14,7 @@ export default function Register() {
 
   // hook
   const [auth, setAuth] = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     // Prevent the default behavior of the browser to reload the page
@@ -36,6 +38,7 @@ export default function Register() {
         localStorage.setItem("auth", JSON.stringify(data));
         setAuth({ ...auth, user: data.user, token: data.token });
         toast.success("Successfull registration. Please login.");
+        navigate("/dashboard");
       }
     } catch (error) {
       toast.error("Register failed. Please try again.");

@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useAuth } from "../../context/auth";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   // state
@@ -10,6 +11,7 @@ export default function Login() {
   const [password, setPassword] = useState("1234567890");
   // hook
   const [auth, setAuth] = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     // Prevent the default behavior of the browser to reload the page
@@ -30,6 +32,7 @@ export default function Login() {
         // spread operator: ...auth
         setAuth({ ...auth, user: data.user, token: data.token });
         toast.success("Login successful.");
+        navigate("/dashboard");
       }
     } catch (error) {
       toast.error("Login failed. Please try again.");
