@@ -19,11 +19,7 @@ export const isAdmin = async (req, res, next) => {
   try {
     // Get user from db
     const user = await User.findById(req.user._id);
-<<<<<<< HEAD
     console.log("ROLE:", user.role);
-=======
-
->>>>>>> 34efe73a4f4e6125573cd424bec27a19e129dd8a
     if (user.role !== 1) {
       return res.status(401).send("Unauthorized");
     } else {

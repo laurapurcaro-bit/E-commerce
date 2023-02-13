@@ -15,16 +15,10 @@ export const register = async (req, res) => {
   // with async request use " try catch"
   try {
     // 1. desctructure name, email, password from req.body
-<<<<<<< HEAD
     const { firstName, lastName, email, password } = req.body;
     // 2. all fields require validation
     // if no name
     console.log(req.body);
-=======
-    const { firstName, lastName, email, password, address } = req.body;
-    // 2. all fields require validation
-    // if no name
->>>>>>> 34efe73a4f4e6125573cd424bec27a19e129dd8a
     if (!firstName.trim()) {
       return res.json({ error: "First name is required" });
     }
@@ -55,10 +49,6 @@ export const register = async (req, res) => {
       lastName,
       email,
       password: hashedPassword,
-<<<<<<< HEAD
-=======
-      address,
->>>>>>> 34efe73a4f4e6125573cd424bec27a19e129dd8a
     });
     // Save data to DB
     user.save();
@@ -72,10 +62,6 @@ export const register = async (req, res) => {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-<<<<<<< HEAD
-=======
-        address: user.address,
->>>>>>> 34efe73a4f4e6125573cd424bec27a19e129dd8a
         role: user.role,
       },
       token,
