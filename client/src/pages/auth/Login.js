@@ -3,15 +3,16 @@ import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useAuth } from "../../context/auth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function Login() {
   // state
-  const [email, setEmail] = useState("lau@gmail.com");
+  const [email, setEmail] = useState("laura@gmail.com");
   const [password, setPassword] = useState("1234567890");
   // hook
   const [auth, setAuth] = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSubmit = async (e) => {
     // Prevent the default behavior of the browser to reload the page
@@ -19,7 +20,7 @@ export default function Login() {
 
     try {
       //
-      const { data } = await axios.post(`${process.env.REACT_APP_API}/login`, {
+      const { data } = await axios.post("/login", {
         email,
         password,
       });
@@ -32,7 +33,10 @@ export default function Login() {
         // spread operator: ...auth
         setAuth({ ...auth, user: data.user, token: data.token });
         toast.success("Login successful.");
-        navigate("/dashboard");
+        navigate(
+          location.state ||
+            `/dashboard/${data?.user?.role === 1 ? "admin" : "user"}`
+        );
       }
     } catch (error) {
       toast.error("Login failed. Please try again.");

@@ -5,25 +5,25 @@ import { Outlet } from "react-router-dom";
 import Loading from "./Loading";
 import axios from "axios";
 
-export default function PrivateRoute() {
+export default function AdminRoute() {
   //  context
   // eslint-disable-next-line
-  const [auth, setAuth] = useAuth();
+  const [auth] = useAuth();
   //  state
   const [ok, setOk] = useState(false);
 
   useEffect(() => {
-    const authCheck = async () => {
+    const adminCheck = async () => {
       //
-      const { data } = await axios.get("/auth-check");
+      const { data } = await axios.get("/admin-check");
       if (data?.ok) {
         setOk(true);
       } else {
         setOk(false);
       }
     };
-    if (auth?.token) authCheck();
+    if (auth?.token) adminCheck();
   }, [auth?.token]);
-
-  return ok ? <Outlet /> : <Loading />;
+  //   If no authouzation return homepage
+  return ok ? <Outlet /> : <Loading path="" />;
 }

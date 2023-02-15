@@ -1,12 +1,13 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import LoadingGIF from "../../images/loading.gif";
 
-export default function Loading() {
+export default function Loading({ path = "login" }) {
   // state
   const [count, setCount] = useState(3);
   // hook
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     // setInterval: run a function every x seconds
@@ -14,9 +15,10 @@ export default function Loading() {
       setCount((currentCount) => --currentCount);
     }, 1000);
     //  redirect once count is equal to 0
-    count === 0 && navigate("/login");
+    count === 0 && navigate(`/${path}`, { state: location.pathname });
     // cleanup
     return () => clearInterval(interval);
+    // eslint-disable-next-line
   }, [count]);
 
   return (

@@ -13,6 +13,9 @@ router.post("/login", login);
 router.get("/auth-check", requireSignIn, (req, res) => {
   res.json({ ok: true });
 });
+router.get("/admin-check", requireSignIn, isAdmin, (req, res) => {
+  res.json({ ok: true });
+});
 // Protect routes so only logged in user have access to it
 // Admin middleware
 router.get("/secret", requireSignIn, isAdmin, secret);

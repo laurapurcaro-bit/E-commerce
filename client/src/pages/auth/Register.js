@@ -22,15 +22,12 @@ export default function Register() {
 
     try {
       //
-      const { data } = await axios.post(
-        `${process.env.REACT_APP_API}/register`,
-        {
-          firstName,
-          lastName,
-          email,
-          password,
-        }
-      );
+      const { data } = await axios.post("/register", {
+        firstName,
+        lastName,
+        email,
+        password,
+      });
       if (data?.error) {
         toast.error(data.error);
       } else {
