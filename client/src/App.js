@@ -12,6 +12,8 @@ import PrivateRoute from "./components/routes/PrivateRoute";
 import AdminRoute from "./components/routes/AdminRoute";
 import AdminCategory from "./pages/admin/Category";
 import AdminProduct from "./pages/admin/Product";
+import UserOrders from "./pages/user/Orders";
+import UserProfile from "./pages/user/Profile";
 
 const PageNotFound = () => {
   return (
@@ -36,6 +38,8 @@ export default function App() {
         <Route path="/dashboard" element={<PrivateRoute />}>
           {/* No need of / before "secret" because of path="" before */}
           <Route path="user" element={<Dashboard />} />
+          <Route path="user/profile" element={<UserProfile />} />
+          <Route path="user/orders" element={<UserOrders />} />
         </Route>
         <Route path="/dashboard" element={<AdminRoute />}>
           <Route path="admin" element={<AdminDashboard />} />
