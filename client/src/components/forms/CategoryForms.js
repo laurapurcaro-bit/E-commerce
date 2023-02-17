@@ -9,7 +9,18 @@ export default function CategoryForm(props) {
           value={props.value}
           onChange={(e) => props.setValue(e.target.value)}
         ></input>
-        <button className="btn btn-primary mt-3">Submit</button>
+        <div className="d-flex justify-content-between">
+          <button className="btn btn-primary mt-3">{props.BtnName}</button>
+          {/* If handleDelete is passed, show delete button */}
+          {props.handleDelete && (
+            <button
+              onClick={props.handleDelete}
+              className="btn btn-danger mt-3"
+            >
+              Delete
+            </button>
+          )}
+        </div>
       </form>
     </div>
   );
