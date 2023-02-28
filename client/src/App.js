@@ -11,7 +11,9 @@ import AdminDashboard from "./pages/admin/Dashboard";
 import PrivateRoute from "./components/routes/PrivateRoute";
 import AdminRoute from "./components/routes/AdminRoute";
 import AdminCategory from "./pages/admin/Category";
-import AdminProduct from "./pages/admin/Product";
+import AdminCreateProduct from "./pages/admin/ProductCreate";
+import AdminShowProducts from "./pages/admin/ProductShow";
+import AdminUpdateProduct from "./pages/admin/ProductUpdate";
 import UserOrders from "./pages/user/Orders";
 import UserProfile from "./pages/user/Profile";
 
@@ -44,7 +46,12 @@ export default function App() {
         <Route path="/dashboard" element={<AdminRoute />}>
           <Route path="admin" element={<AdminDashboard />} />
           <Route path="admin/category" element={<AdminCategory />} />
-          <Route path="admin/product" element={<AdminProduct />} />
+          <Route path="admin/product" element={<AdminCreateProduct />} />
+          <Route path="admin/products" element={<AdminShowProducts />} />
+          <Route
+            path="admin/products/update/:slug"
+            element={<AdminUpdateProduct />}
+          />
         </Route>
         <Route path="*" element={<PageNotFound />} replace />
       </Routes>

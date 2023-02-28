@@ -5,6 +5,7 @@ import morgan from "morgan";
 // With node you need to include file extension .js when importing
 import authRoutes from "./routes/auth.js";
 import categoryRoutes from "./routes/category.js";
+import productRoutes from "./routes/product.js";
 import cors from "cors";
 
 dotenv.config();
@@ -29,6 +30,7 @@ app.use(express.json());
 // router middleware
 app.use("/api", authRoutes);
 app.use("/api", categoryRoutes);
+app.use("/api", productRoutes);
 
 app.listen(port, () => {
   console.log(`Server listen on port ${port}`);

@@ -3,16 +3,17 @@ import Jumbotron from "../../components/cards/Jumbotron";
 import AdminMenu from "../../components/nav/AdminMenu";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Select } from "antd";
+import { Select, Upload } from "antd";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const { Option } = Select;
 
-export default function AdminProduct() {
+export default function AdminUpdateProduct() {
   // context
   const [auth] = useAuth();
   const navigate = useNavigate();
+  const { slug } = useParams();
   // state
   // Categories in the database
   const [categories, setCategories] = useState([]);
@@ -24,6 +25,12 @@ export default function AdminProduct() {
   const [category, setCategory] = useState("");
   const [shipping, setShipping] = useState("");
   const [quantity, setQuantity] = useState("");
+  // Id
+  const [id, setId] = useState("");
+
+  useEffect(() => {
+    loadProduct();
+  }, []);
 
   useEffect(() => {
     loadCategories();
@@ -33,6 +40,22 @@ export default function AdminProduct() {
     try {
       const { data } = await axios.get("/categories");
       setCategories(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const loadProduct = async () => {
+    try {
+      const { data } = await axios.get(`/product/${slug}`);
+      console.log(data);
+      setName(data.name);
+      setDescription(data.description);
+      setPrice(data.price);
+      setId(data._id);
+      setCategory(data.category._id);
+      setShipping(data.shipping);
+      setQuantity(data.quantity);
     } catch (err) {
       console.log(err);
     }
@@ -50,17 +73,18 @@ export default function AdminProduct() {
       formData.append("shipping", shipping);
       formData.append("quantity", quantity);
 
-      const { data } = await axios.post("/product", formData);
+      const { data } = await axios.put(`/product/${id}`, formData);
+
       if (data?.error) {
         toast.error(data.error);
       } else {
         // Show the newly created category
-        toast.success(`Product ${data.name} created`);
+        toast.success(`Product ${data.name} is updated`);
         navigate("/dashboard/admin/products");
       }
     } catch (err) {
       console.log(err);
-      toast.error("Create product failed. Try again.");
+      toast.error("Update product failed. Try again.");
     }
   };
 
@@ -78,11 +102,31 @@ export default function AdminProduct() {
           </div>
 
           <div className="col-md-9">
-            <div className="p-3 mt-2 mb-2 h4 bg-light">Create Products</div>
+            <div className="p-3 mt-2 mb-2 h4 bg-light">Update Product</div>
             {photo?.size && (
               <div className="text-center">
                 <img
                   src={URL.createObjectURL(photo)}
+                  alt="product"
+                  className="img img-responsive"
+                  height="200px"
+                />
+              </div>
+            )}
+
+            {photo?.size ? (
+              <div className="text-center">
+                <img
+                  src={URL.createObjectURL(photo)}
+                  alt="product"
+                  className="img img-responsive"
+                  height="200px"
+                />
+              </div>
+            ) : (
+              <div className="text-center">
+                <img
+                  src={`${process.env.REACT_APP_API}/product/photo/${id}`}
                   alt="product"
                   className="img img-responsive"
                   height="200px"
@@ -101,6 +145,7 @@ export default function AdminProduct() {
                 />
               </label>
             </div>
+
             {/* Category name */}
             <input
               type="text"
@@ -127,15 +172,18 @@ export default function AdminProduct() {
             />
             {/* Categories */}
             <Select
-              showSearch
+              // showSearch
               bordered={false}
               size="large"
               className="form-select mb-3"
               placeholder="Choose a category"
+              value={category}
               onChange={(category) => setCategory(category)}
             >
               {categories?.map((category) => (
-                <Option key={category._id} value={category.name}></Option>
+                <Option key={category._id} value={category._id}>
+                  {category.name}
+                </Option>
               ))}
             </Select>
             {/* Quantity */}
@@ -153,6 +201,7 @@ export default function AdminProduct() {
               size="large"
               className="form-select mb-3"
               placeholder="Choose shipping"
+              value={shipping ? "1" : "0"}
               onChange={(shipping) => setShipping(shipping)}
             >
               <Option value="0">No</Option>
@@ -162,7 +211,7 @@ export default function AdminProduct() {
               onClick={handleSubmit}
               className="btn btn-outline-primary mb-5"
             >
-              Save
+              Update
             </button>
           </div>
         </div>

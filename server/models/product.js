@@ -29,7 +29,7 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     // Keeping track of the quantity of the product
-    quantitiy: {
+    quantity: {
       type: Number,
     },
     sold: {
