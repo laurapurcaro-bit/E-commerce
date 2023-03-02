@@ -13,7 +13,7 @@ import AdminRoute from "./components/routes/AdminRoute";
 import AdminCategory from "./pages/admin/Category";
 import AdminCreateProduct from "./pages/admin/ProductCreate";
 import AdminShowProducts from "./pages/admin/ProductShow";
-import AdminUpdateProduct from "./pages/admin/ProductUpdate";
+import AdminUpdateProduct from "./pages/admin/ProductUpdateAndDelete";
 import UserOrders from "./pages/user/Orders";
 import UserProfile from "./pages/user/Profile";
 
