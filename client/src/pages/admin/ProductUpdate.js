@@ -3,7 +3,7 @@ import Jumbotron from "../../components/cards/Jumbotron";
 import AdminMenu from "../../components/nav/AdminMenu";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Select, Upload } from "antd";
+import { Select } from "antd";
 import { toast } from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -30,6 +30,7 @@ export default function AdminUpdateProduct() {
 
   useEffect(() => {
     loadProduct();
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -48,7 +49,7 @@ export default function AdminUpdateProduct() {
   const loadProduct = async () => {
     try {
       const { data } = await axios.get(`/product/${slug}`);
-      console.log(data);
+
       setName(data.name);
       setDescription(data.description);
       setPrice(data.price);
@@ -61,11 +62,12 @@ export default function AdminUpdateProduct() {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
     try {
       const formData = new FormData();
-      formData.append("photo", photo);
+      // Check if photo in the state
+      photo && formData.append("photo", photo);
       formData.append("name", name);
       formData.append("description", description);
       formData.append("price", price);
@@ -81,10 +83,29 @@ export default function AdminUpdateProduct() {
         // Show the newly created category
         toast.success(`Product ${data.name} is updated`);
         navigate("/dashboard/admin/products");
+        // Reload the page and show the new category
+        window.location.reload();
       }
     } catch (err) {
       console.log(err);
       toast.error("Update product failed. Try again.");
+    }
+  };
+
+  const handleDelete = async (req, res) => {
+    try {
+      let answer = window.confirm(
+        "Are you sure you want to delete this product?"
+      );
+      // If no, block the function with return
+      if (!answer) return;
+      // Otherwise, delete the product
+      const { data } = await axios.delete(`/product/${id}`);
+      toast.success(`"${data.name}" is deleted.`);
+      navigate("/dashboard/admin/products");
+    } catch (err) {
+      console.log(err);
+      toast.error("Delete product failed. Try again.");
     }
   };
 
@@ -103,16 +124,6 @@ export default function AdminUpdateProduct() {
 
           <div className="col-md-9">
             <div className="p-3 mt-2 mb-2 h4 bg-light">Update Product</div>
-            {photo?.size && (
-              <div className="text-center">
-                <img
-                  src={URL.createObjectURL(photo)}
-                  alt="product"
-                  className="img img-responsive"
-                  height="200px"
-                />
-              </div>
-            )}
 
             {photo?.size ? (
               <div className="text-center">
@@ -125,8 +136,11 @@ export default function AdminUpdateProduct() {
               </div>
             ) : (
               <div className="text-center">
+                {/* Fetch the latest image */}
                 <img
-                  src={`${process.env.REACT_APP_API}/product/photo/${id}`}
+                  src={`${
+                    process.env.REACT_APP_API
+                  }/product/photo/${id}?${new Date().getTime()}`}
                   alt="product"
                   className="img img-responsive"
                   height="200px"
@@ -207,12 +221,20 @@ export default function AdminUpdateProduct() {
               <Option value="0">No</Option>
               <Option value="1">Yes</Option>
             </Select>
-            <button
-              onClick={handleSubmit}
-              className="btn btn-outline-primary mb-5"
-            >
-              Update
-            </button>
+            <div className="d-flex justify-content-end">
+              <button
+                onClick={handleUpdate}
+                className="btn btn-outline-primary mb-5 m-2"
+              >
+                Update
+              </button>
+              <button
+                onClick={handleDelete}
+                className="btn btn-outline-danger mb-5 m-2"
+              >
+                Delete
+              </button>
+            </div>
           </div>
         </div>
       </div>

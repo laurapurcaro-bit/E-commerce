@@ -5,12 +5,15 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminShowProducts() {
   // context
   const [auth] = useAuth();
+  const navigate = useNavigate();
   //  hook
   const [products, setProducts] = useState([]);
+  const [slug_param, setSlug_param] = useState("");
 
   useEffect(() => {
     loadProducts();
@@ -23,6 +26,11 @@ export default function AdminShowProducts() {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const handleButtons = (slug) => {
+    setSlug_param(slug);
+    navigate(`dashboard/admin/products/update/${slug}`);
   };
 
   return (
@@ -69,6 +77,22 @@ export default function AdminShowProducts() {
                             )}
                           </small>
                         </p>
+                        <div>
+                          <button
+                            className="btn btn-primary btn-sm m-2"
+                            onClick={(e) => handleButtons(p.slug)}
+                            value={slug_param}
+                          >
+                            Update
+                          </button>
+                          <button
+                            className="btn btn-danger btn-sm m-2"
+                            onClick={(e) => handleButtons(p.slug)}
+                            value={slug_param}
+                          >
+                            Delete
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
